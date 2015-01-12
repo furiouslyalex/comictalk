@@ -21,19 +21,24 @@ page = Nokogiri::HTML(open(new_releases_url))
 
 links = page.css('div.HtmlContent table tr')
 
-#puts links.css('span')
+list = Array.new(2) { Array.new(2) }
 
 for x in links
 	spans = x.css('td span')
 		for z in spans
-			puts z.css('strong').text
-			test = x.css('td a')
-				for y in test
-					puts y['href']
-				end
+			title =  z.css('strong').text
+			unless title.include? "TP" or  title.include? "HC" 
+				list[:title] = title
+				test = x.css('td a')
+					for y in test
+						link = y['href']
+						list[:link] = link
+					end
+			end
 		end
 end
 
+puts list
 
 def comic_info(url)
 	page = Nokogiri::HTML(open(url))
